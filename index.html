@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY BABY?</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            overflow: hidden;
+            flex-direction: column;
+            text-align: center;
+        }
+        .question-container, .container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+        .question-container.active {
+            display: flex;
+        }
+        .container.active {
+            display: flex;
+        }
+        .question {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .answers {
+            display: flex;
+            gap: 10px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+        }
+        .images img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            margin: 10px;
+            display: none;
+        }
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            width: 50px;
+            height: 70px;
+            background: url('balloon.png') no-repeat center center/contain;
+            animation: float 6s ease-in infinite;
+            z-index: 0;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-120vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="question-container active" id="question-container">
+        <div class="question">MY BABY?</div>
+        <div class="answers">
+            <button class="button" id="yes-button">YES</button>
+        </div>
+    </div>
+    <div class="container" id="content-container">
+        <div class="message" id="message">I wanna hold you so much
+At long last, love has arrived
+And I thank God I'm alive
+You're just too good to be true
+Can't take my eyes off of you (ha)
+
+I love you, baby
+And if it's quite alright, I need you, baby
+To warm the lonely night
+I love you, baby, trust in me when I say</div>
+        <div class="images">
+            <img src="gif1.gif" alt="GIF 1" class="image">
+            <img src="gif2.gif" alt="GIF 2" class="image">
+            <img src="image1.jpg" alt="Imagem 1" class="image">
+            <img src="image2.jpg" alt="Imagem 2" class="image">
+        </div>
+    </div>
+    <audio id="background-music">
+        <source src="sua-musica.mp3" type="audio/mp3">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const questionContainer = document.getElementById('question-container');
+            const contentContainer = document.getElementById('content-container');
+            const yesButton = document.getElementById('yes-button');
+            const music = document.getElementById('background-music');
+
+            yesButton.addEventListener('click', () => {
+                questionContainer.classList.remove('active');
+                contentContainer.classList.add('active');
+                music.play();
+
+                music.addEventListener('playing', () => {
+                    const delayBetweenElements = 2000; // 2 segundos
+                    const delayBeforeFirstElement = 3000; // 3 segundos antes do primeiro GIF
+
+                    let images = document.querySelectorAll('.images .image');
+                    let message = document.getElementById('message');
+
+                    let totalDelay = delayBeforeFirstElement;
+
+                    images.forEach((img, index) => {
+                        setTimeout(() => {
+                            img.style.display = 'block';
+                        }, totalDelay);
+                        totalDelay += delayBetweenElements;
+                    });
+
+                    setTimeout(() => {
+                        message.style.display = 'block';
+                    }, totalDelay);
+
+                    setInterval(() => {
+                        createBalloon();
+                    }, 500); // Cria um balão a cada 500ms
+                });
+            });
+        });
+
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            balloon.style.left = Math.random() * 100 + 'vw'; // Posição horizontal aleatória
+            document.body.appendChild(balloon);
+            setTimeout(() => {
+                balloon.remove(); // Remove o balão após a animação
+            }, 6000); // Tempo da animação (6s)
+        }
+    </script>
+</body>
+</html>
